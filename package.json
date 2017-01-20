@@ -1,0 +1,40 @@
+{
+  "name": "html-transformer",
+  "version": "1.0.0",
+  "description": "HTML streaming transformer",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc src/index.ts --outDir lib",
+    "test": "mocha --require ts-babel-node/register test/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Perlmint/html-transformer.git"
+  },
+  "keywords": [
+    "html",
+    "modify"
+  ],
+  "author": "Gysun Yeom <omniavinco@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Perlmint/html-transformer/issues"
+  },
+  "homepage": "https://github.com/Perlmint/html-transformer#readme",
+  "devDependencies": {
+    "@types/chai": "^3.4.34",
+    "@types/htmlparser2": "^3.7.29",
+    "@types/mocha": "^2.2.38",
+    "@types/node": "^7.0.0",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "mocha-typescript": "^1.0.15",
+    "ts-babel-node": "^1.1.1",
+    "ts-node": "^2.0.0",
+    "typescript": "^2.1.5"
+  },
+  "dependencies": {
+    "html-tokenize": "^2.0.0",
+    "htmlparser2": "^3.9.2"
+  }
+}
