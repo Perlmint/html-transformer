@@ -7,7 +7,7 @@
     "build": "tsc src/index.ts --outDir lib",
     "coverage": "tsc && istanbul cover _mocha test/*.js && remap-istanbul -i ./coverage/coverage.json -o ./coverage/lcov.info -t lcovonly",
     "coveralls": "npm run coverage && coveralls < ./coverage/lcov.info",
-    "test": "mocha --require ts-babel-node/register test/*"
+    "test": "mocha --require ts-babel-node/register test/*.ts"
   },
   "repository": {
     "type": "git",
