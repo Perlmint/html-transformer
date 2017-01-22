@@ -8,3 +8,4 @@ coverage
 *.js.map
 src/*.js
 test/*.js
+test-out
