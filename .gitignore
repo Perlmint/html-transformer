@@ -1,1 +1,10 @@
+#npm module
 node_modules
+
+# unittest coverage result
+coverage
+
+# ignore build result
+*.js.map
+src/*.js
+test/*.js
