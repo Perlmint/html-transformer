@@ -1,11 +1,13 @@
 {
   "name": "html-transformer",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "HTML streaming transformer",
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc src/index.ts --outDir lib",
-    "test": "mocha --require ts-babel-node/register test/*"
+    "coverage": "tsc --outDir test-out && istanbul cover _mocha test-out/test/*.js -- -R spec && remap-istanbul -i ./coverage/coverage.json -o ./coverage/lcov.info -t lcovonly",
+    "remap-covhtml": "remap-istanbul -i ./coverage/coverage.json -o ./coverage/lcov-report -t html", 
+    "test": "mocha --require ts-babel-node/register test/*.ts"
   },
   "repository": {
     "type": "git",
@@ -27,14 +29,16 @@
     "@types/mocha": "^2.2.38",
     "@types/node": "^7.0.0",
     "chai": "^3.5.0",
+    "codecov": "^1.0.1",
+    "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "mocha-typescript": "^1.0.15",
+    "remap-istanbul": "^0.8.4",
     "ts-babel-node": "^1.1.1",
     "ts-node": "^2.0.0",
     "typescript": "^2.1.5"
   },
   "dependencies": {
-    "html-tokenize": "^2.0.0",
     "htmlparser2": "^3.9.2"
   }
 }
