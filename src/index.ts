@@ -54,11 +54,14 @@ export class Transformer extends stream.Transform {
 
     protected _onOpenTag(name: string, attrib: {[key: string]: string}) {
         const lowerName = name.toLowerCase();
-        const attribModifiers = this.tagModifier[lowerName];
-        if (attribModifiers != null) {
+        for (const tagKey of Object.keys(this.tagModifier)
+            .filter(v => v === lowerName || v === "*")) {
+            const attribModifiers = this.tagModifier[tagKey];
+
             for (const attribKey of Object.keys(attrib)) {
-                const valueModifiers = attribModifiers[attribKey.toLowerCase()];
-                if (valueModifiers != null) {
+                for (const attribTarget of Object.keys(attribModifiers)
+                    .filter(v => v === attribKey.toLowerCase() || v === "*")) {
+                    const valueModifiers = attribModifiers[attribTarget];
                     attrib[attribKey] = Transformer._transformString(attrib[attribKey], valueModifiers);
                 }
             }
