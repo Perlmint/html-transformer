@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as stream from "stream";
 import * as parser2 from "htmlparser2";
 
-type StringTransformer = (text: string) => string;
+type StringTransformer = (text: string, matched: RegExpExecArray) => string;
 type Transforms = [RegExp, StringTransformer][];
 
 export class Transformer extends stream.Transform {
@@ -45,8 +45,9 @@ export class Transformer extends stream.Transform {
 
     protected static _transformString(text: string, transforms: Transforms): string {
         for (const transform of transforms) {
-            if (transform[0].test(text)) {
-                return transform[1](text);
+            const execRes = transform[0].exec(text);
+            if (execRes) {
+                return transform[1](text, execRes);
             }
         }
         return text;

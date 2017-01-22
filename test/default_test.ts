@@ -77,4 +77,36 @@ function promisefy(fn: (...args: any[]) => any, ...args: any[]): Promise<void> {
 </html>`);
         });
     }
+
+    @test attributeAsteriskTransformTest() {
+        const htmlBuffer = new stream.Duplex();
+        const transformer = new Transformer();
+        let output = "";
+
+        transformer.onTag("*", "X-nothing", /hello/, text => "censored");
+        htmlBuffer.pipe(transformer);
+        transformer.on('data', (d : any) => output = output + d);
+
+        transformer.setEncoding("utf-8");
+        transformer.end(`<html>
+<head>
+    </head>
+    <body>
+        <div X-nothing="hello">hello, world!</div>
+        <div X-something="hello">hello, everyone!</div>
+        <span X-nothing="hello">hello nothing</span>
+    </body>
+</html>`);
+        transformer.on('end', () => {
+            assert.equal(output , `<html>
+<head>
+    </head>
+    <body>
+        <div X-nothing="censored">hello, world!</div>
+        <div X-something="hello">hello, everyone!</div>
+        <span X-nothing="censored">hello nothing</span>
+    </body>
+</html>`);
+        });
+    }
 }
