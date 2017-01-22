@@ -22,9 +22,11 @@ export class Transformer extends stream.Transform {
 
     protected tagModifier: {[key:string]:{[key:string]:Transforms}} = {};
     onTag(tagname: string, attribute: string, pattern: RegExp, transformer: StringTransformer) {
+        tagname = tagname.toLowerCase();
         if (this.tagModifier[tagname] == null) {
             this.tagModifier[tagname] = {};
         }
+        attribute = attribute.toLowerCase();
         if (this.tagModifier[tagname][attribute] == null) {
             this.tagModifier[tagname][attribute] = [];
         }
@@ -35,6 +37,7 @@ export class Transformer extends stream.Transform {
 
     protected beforeCloseTags: {[key:string]: (()=>string)[]} = {};
     onBeforeClosingTag(tagname: string, transformer: () => string) {
+        tagname = tagname.toLowerCase();
         if (this.beforeCloseTags[tagname] == null) {
             this.beforeCloseTags[tagname] = [];
         }
