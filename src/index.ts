@@ -5,6 +5,10 @@ import * as parser2 from "htmlparser2";
 type StringTransformer = (text: string, matched: RegExpExecArray) => string;
 type Transforms = [RegExp, StringTransformer][];
 
+function isSelfClosedTag(tagname: string) {
+    return tagname === "br" || tagname === "img";
+}
+
 export class Transformer extends stream.Transform {
     constructor(option?: stream.TransformOptions) {
         super(option);
@@ -82,17 +86,26 @@ export class Transformer extends stream.Transform {
         }
 
         const attribsStr = Object.keys(attrib).map(k => ` ${k}=\"${attrib[k]}\"`).join("");
-        const trailling = lowerName === "br" || lowerName === "img" ? "/" : ""; 
+        const trailling = isSelfClosedTag(name) ? "/" : "";
+        if (isSelfClosedTag(name)) {
+            this._onProcessCloseTag(name);
+        }
         this.push(`<${name}${attribsStr}${trailling}>`);
     }
 
-    protected _onCloseTag(name: string) {
+    protected _onProcessCloseTag(name: string) {
         if (this.beforeCloseTags[name]) {
             for(const transformer of this.beforeCloseTags[name]) {
                 this.push(transformer());
             }
         }
-        this.push(`</${name}>`);
+    }
+
+    protected _onCloseTag(name: string) {
+        if (!isSelfClosedTag(name)) {
+            this._onProcessCloseTag(name);
+            this.push(`</${name}>`);
+        }
     }
 
     protected _transform(chunk: string | Buffer, encoding: string, callback: (error?: Error, data?: string) => void): void {

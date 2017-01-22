@@ -89,4 +89,40 @@ function transformTest(stream: stream.Transform, input: string, expected: string
     </body>
 </html>`, done);
     }
+
+    @test "Insert new tag before closing body"(done: () => void) {
+        const transformer = new Transformer();
+
+        transformer.onBeforeClosingTag("body", () => {
+            return "<script src=\"injected.js\"></script>";
+        });
+        transformTest(transformer, `<html>
+<head>
+    </head>
+    <body>
+        <div x-nothing="hello">hello, world!</div>
+        <div x-something="hello">hello, everyone!</div>
+        <span x-nothing="hello">hello nothing</span>
+    </body>
+</html>`, `<html>
+<head>
+    </head>
+    <body>
+        <div x-nothing="hello">hello, world!</div>
+        <div x-something="hello">hello, everyone!</div>
+        <span x-nothing="hello">hello nothing</span>
+    <script src="injected.js"></script></body>
+</html>`, done);
+    }
+
+    @test "Self closed tag"(done: () => void) {
+        const transformer = new Transformer();
+
+        transformer.onTag("img", "src", /@(.+)/, (text, matched) => {
+            return `/static/${matched[1]}`;
+        });
+        transformTest(transformer,
+        `<html><body><img src="@custom_res"/></body></html>`,
+        `<html><body><img src="/static/custom_res"/></body></html>`, done);
+    }
 }
