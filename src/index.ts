@@ -33,6 +33,15 @@ export class Transformer extends stream.Transform {
         return this;
     }
 
+    protected beforeCloseTags: {[key:string]: (()=>string)[]} = {};
+    onBeforeClosingTag(tagname: string, transformer: () => string) {
+        if (this.beforeCloseTags[tagname] == null) {
+            this.beforeCloseTags[tagname] = [];
+        }
+        this.beforeCloseTags[tagname].push(transformer);
+        return this;
+    }
+
     protected textTransforms: Transforms = [];
     onText(pattern: RegExp, transformer: StringTransformer) {
         this.textTransforms.push([pattern, transformer]);
@@ -75,6 +84,11 @@ export class Transformer extends stream.Transform {
     }
 
     protected _onCloseTag(name: string) {
+        if (this.beforeCloseTags[name]) {
+            for(const transformer of this.beforeCloseTags[name]) {
+                this.push(transformer());
+            }
+        }
         this.push(`</${name}>`);
     }
 
