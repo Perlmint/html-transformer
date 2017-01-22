@@ -10,7 +10,8 @@ export class Transformer extends stream.Transform {
         super(option);
         this.parser = new parser2.Parser({
             ontext: text => this._onText(text),
-            onopentag: (name, attrib) => this._onOpenTag(name, attrib)
+            onopentag: (name, attrib) => this._onOpenTag(name, attrib),
+            onclosetag: name => this._onCloseTag(name)
         }, {
             recognizeSelfClosing: false
         });
