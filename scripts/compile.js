@@ -44,7 +44,7 @@ function compile(fileNames, outDir) {
         NODE: ts.ModuleResolutionKind.NodeJs,
         CLASSIC: ts.ModuleResolutionKind.Classic
     }[tsconfig.compilerOptions.moduleResolution.toUpperCase()];
-    console.log(tsconfig.compilerOptions);
+
     let program = ts.createProgram(fileNames, tsconfig.compilerOptions);
     let emitResult = program.emit();
 
