@@ -9,7 +9,7 @@
     "coverage": "node scripts/compile.js test-out test/* src/* && istanbul cover _mocha test-out/test/*.js -- -R spec && remap-istanbul -i ./coverage/coverage.json -o ./coverage/lcov.info -t lcovonly",
     "remap-covhtml": "remap-istanbul -i ./coverage/coverage.json -o ./coverage/lcov-report -t html",
     "test": "mocha --require ts-babel-node/register test/*.ts",
-    "typedoc": "typedoc --out doc --ignoreCompilerErrors --mode file --excludePrivate"
+    "typedoc": "typedoc --out docs --ignoreCompilerErrors --mode file --excludePrivate"
   },
   "repository": {
     "type": "git",
