@@ -9,3 +9,6 @@ coverage
 src/*.js
 test/*.js
 test-out
+
+# documentation
+doc
