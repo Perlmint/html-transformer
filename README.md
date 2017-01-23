@@ -6,6 +6,7 @@ HTML transformer
 [![codecov](https://codecov.io/gh/Perlmint/html-transformer/branch/master/graph/badge.svg)](https://codecov.io/gh/Perlmint/html-transformer)
 [![dependencies Status](https://david-dm.org/perlmint/html-transformer/status.svg)](https://david-dm.org/perlmint/html-transformer)
 [![devDependencies Status](https://david-dm.org/perlmint/html-transformer/dev-status.svg)](https://david-dm.org/perlmint/html-transformer?type=dev)
+[![typedoc link](https://img.shields.io/badge/docs-typedoc-blue.svg)](https://perlmint.github.io/html-transformer/index.html)
 
 ## Example
 ```javascript
