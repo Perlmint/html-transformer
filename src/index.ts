@@ -2,13 +2,20 @@ import * as fs from "fs";
 import * as stream from "stream";
 import * as parser2 from "htmlparser2";
 
-type StringTransformer = (text: string, matched: RegExpExecArray) => string;
-type Transforms = [RegExp, StringTransformer][];
+export type StringTransformer = (text: string, matched: RegExpExecArray) => string;
+export type Transforms = [RegExp, StringTransformer][];
 
+/**
+ * Self closed tag predicator
+ * @internal
+ **/
 function isSelfClosedTag(tagname: string) {
     return tagname === "br" || tagname === "img";
 }
 
+/**
+ * Transform HTML stream
+ **/
 export class Transformer extends stream.Transform {
     constructor(option?: stream.TransformOptions) {
         super(option);
@@ -25,6 +32,13 @@ export class Transformer extends stream.Transform {
     protected parser: parser2.Parser;
 
     protected tagModifier: {[key:string]:{[key:string]:Transforms}} = {};
+    /**
+     * Append transform for tag attribute value.
+     * @param tagname Target tag name. can use '*' for any tag
+     * @param attribute Attribute name. can use '*' for any attribute
+     * @param pattern Attribute pattern to transform
+     * @param transformer Transform function.
+     **/
     onTag(tagname: string, attribute: string, pattern: RegExp, transformer: StringTransformer) {
         tagname = tagname.toLowerCase();
         if (this.tagModifier[tagname] == null) {
@@ -40,6 +54,11 @@ export class Transformer extends stream.Transform {
     }
 
     protected beforeCloseTags: {[key:string]: (()=>string)[]} = {};
+    /**
+     * Insert some value before closing tag
+     * @param tagname Target tag name. Can't use '*'
+     * @param transformer Generator that returns inserted before closing tag 
+     **/
     onBeforeClosingTag(tagname: string, transformer: () => string) {
         tagname = tagname.toLowerCase();
         if (this.beforeCloseTags[tagname] == null) {
@@ -50,6 +69,11 @@ export class Transformer extends stream.Transform {
     }
 
     protected textTransforms: Transforms = [];
+    /**
+     * Append text node transform
+     * @param pattern Text pattern to find
+     * @param transformer text node content transform function
+     **/
     onText(pattern: RegExp, transformer: StringTransformer) {
         this.textTransforms.push([pattern, transformer]);
 
