@@ -5,7 +5,9 @@ node_modules
 coverage
 
 # ignore build result
-*.js.map
 src/*.js
 test/*.js
 test-out
+
+# documentation
+doc
